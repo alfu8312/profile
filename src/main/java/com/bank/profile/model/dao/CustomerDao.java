@@ -10,7 +10,7 @@ public interface CustomerDao<T extends CustomerVO> {
 
 	public void saveCustomerBatch(List<T> customerList);
 
-	public T findByCustomerId(int customerNumber);
+	public T findByCustomerId(String customerNumber);
 	
 	public void deleteAllCustomer();
 

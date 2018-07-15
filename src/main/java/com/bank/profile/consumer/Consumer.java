@@ -45,36 +45,58 @@ public class Consumer {
 			System.out.println("running consumer");
 			// type 2 - 파티션 단위로 쓰레드 생성해서 처리
 			while (true) {
-				ConsumerRecords<String, String> records = consumer.poll(200);
-				ForkJoinPool myPool = new ForkJoinPool(4);
-				myPool.submit(() -> {
-					records.partitions().parallelStream().forEach(partition -> {
-						System.out.println(Thread.currentThread().getName() + " : " + partition.partition());
-
-						Map<String, List<ConsumerRecord<String, String>>> mapped = getMappedRecords(
-								records.records(partition));
-						List<ConsumerRecord<String, String>> customerList = null;
-						List<ConsumerRecord<String, String>> accountList = null;
-						try {
-							customerList = mapped.get(LogTypes.CUSTOMER);
-							customerService.saveCustomerBatch(mapped.get(LogTypes.CUSTOMER));
-						} catch (Exception e) {
-							e.printStackTrace();
-							consumer.seek(partition, customerList.get(0).offset());
-						}
-						try {
-							accountList = mapped.get(LogTypes.ACCOUNT);
-							// TODO accountList 를 계좌별로 분리후 병렬 처리 가능..
-							accountService.saveAccountInfo(accountList);
-						} catch (Exception e) {
-							e.printStackTrace();
-							consumer.seek(partition, accountList.get(0).offset());
-						}
-					});
-				});
+				// TODO multiThread 테스트
+				parallelConsume();
 			}
 		} finally {
 			consumer.close();
+		}
+	}
+
+	private void parallelConsume() {
+		boolean[] hasException = { false };
+		ConsumerRecords<String, String> records = consumer.poll(200);
+		if (!records.isEmpty()) {
+			System.out.println("get records!!!! : " + records.count());
+			ForkJoinPool myPool = new ForkJoinPool(2);
+			myPool.submit(() -> {
+				records.partitions().parallelStream().forEach(partition -> {
+					System.out.println(Thread.currentThread().getName() + " : " + partition.partition());
+
+					Map<String, List<ConsumerRecord<String, String>>> mapped = getMappedRecords(
+							records.records(partition));
+					List<ConsumerRecord<String, String>> customerList = null;
+					List<ConsumerRecord<String, String>> accountList = null;
+					try {
+						customerList = mapped.get(LogTypes.CUSTOMER);
+						if (!customerList.isEmpty()) {
+							customerService.saveCustomerBatch(mapped.get(LogTypes.CUSTOMER));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						consumer.seek(partition, customerList.get(0).offset());
+						hasException[0] = true;
+					}
+					try {
+						accountList = mapped.get(LogTypes.ACCOUNT);
+						if (!accountList.isEmpty()) {
+							// TODO accountList 를 계좌별로 분리후 병렬 처리 가능..
+							accountService.saveAccountInfo(accountList);
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						consumer.seek(partition, accountList.get(0).offset());
+						hasException[0] = true;
+					}
+
+					if (!hasException[0]) {
+						System.out.println("commit before");
+						consumer.commitSync();
+						System.out.println("commit after");
+					}
+				});
+			});
+
 		}
 	}
 
@@ -96,18 +118,4 @@ public class Consumer {
 		mappedRecords.put(LogTypes.ACCOUNT, accountList);
 		return mappedRecords;
 	}
-
-	private static boolean printData(List<ConsumerRecord<String, String>> partitionRecords) {
-		try {
-			for (ConsumerRecord<String, String> record : partitionRecords) {
-				System.out.printf("Receive key: %s, Partition: %d, Offset: %d, Value: %s\n", record.key(),
-						record.partition(), record.offset(), record.value());
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			return false;
-		}
-		return true;
-	}
-
 }

@@ -1,5 +1,6 @@
 package com.bank.profile.model.dao.impl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.bank.profile.model.DaoFactory;
@@ -12,7 +13,7 @@ import com.mongodb.client.MongoCollection;
 public class MongoCustomerDao implements CustomerDao<MongoCustomerVO> {
 
 	private MongoDaoFactory daoFactory;
-	private final String COLLECTION_NAME = "test";
+	private final String COLLECTION_NAME = "customer";
 
 	private MongoCollection<MongoCustomerVO> getCollection() {
 		return daoFactory.getDatabase().getCollection(COLLECTION_NAME, MongoCustomerVO.class);
@@ -33,9 +34,9 @@ public class MongoCustomerDao implements CustomerDao<MongoCustomerVO> {
 	}
 
 	@Override
-	public MongoCustomerVO findByCustomerId(int customerNumber) {
+	public MongoCustomerVO findByCustomerId(String customerNumber) {
 		BasicDBObject query = new BasicDBObject();
-		query.put("customerNumber", customerNumber);
+		query.put("_id", customerNumber);
 		return getCollection().find(query).first();
 	}
 	

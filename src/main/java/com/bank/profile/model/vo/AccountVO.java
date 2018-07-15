@@ -4,29 +4,29 @@ import java.util.Date;
 
 public abstract class AccountVO extends AbstractVO {
 
-	private int accountNumber;
-	private int customerNumber;
-	private int balance;
+	private String accountNumber;
+	private String customerNumber;
 	private Date createDt;
 
-	private int maxDeposit;
-	private int maxWithdraw;
-	private int maxTransfer;
+	private int balance = 0;
+	private int maxDeposit = 0;
+	private int maxWithdraw = 0;
+	private int maxTransfer = 0;
 
-	public int getCustomerNumber() {
-		return customerNumber;
-	}
-
-	public void setCustomerNumber(int customerNumber) {
-		this.customerNumber = customerNumber;
-	}
-
-	public int getAccountNumber() {
+	public String getAccountNumber() {
 		return accountNumber;
 	}
 
-	public void setAccountNumber(int accountNumber) {
+	public void setAccountNumber(String accountNumber) {
 		this.accountNumber = accountNumber;
+	}
+
+	public String getCustomerNumber() {
+		return customerNumber;
+	}
+
+	public void setCustomerNumber(String customerNumber) {
+		this.customerNumber = customerNumber;
 	}
 
 	public int getBalance() {

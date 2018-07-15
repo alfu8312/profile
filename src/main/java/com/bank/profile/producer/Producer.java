@@ -28,12 +28,21 @@ public class Producer {
 
 		Stream<String> lines = null;
 		try {
-			lines = Files.lines(Paths.get(getClass().getClassLoader().getResource(filePath).toURI()));
-			int index[] = new int[] { 0 };
-			lines.forEach((line) -> {
-				index[0]++;
-				queue.offer(line);
-			});
+			int i = 0;
+			while (i++ < 2) {
+				System.out.println("send logs!!! ## : " + i);
+				lines = Files.lines(Paths.get(getClass().getClassLoader().getResource(filePath).toURI()));
+				lines.forEach((line) -> {
+					queue.offer(line);
+				});
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {

@@ -4,15 +4,15 @@ import java.util.Date;
 
 public abstract class CustomerVO extends AbstractVO {
 
-	private int customerNumber;
+	private String customerNumber;
 	private String name;
 	private Date joinDt;
 
-	public int getCustomerNumber() {
+	public String getCustomerNumber() {
 		return customerNumber;
 	}
 
-	public void setCustomerNumber(int customerNumber) {
+	public void setCustomerNumber(String customerNumber) {
 		this.customerNumber = customerNumber;
 	}
 

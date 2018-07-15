@@ -1,18 +1,19 @@
 package com.bank.profile.model.vo.mongo;
 
-import org.bson.types.ObjectId;
+import org.bson.codecs.pojo.annotations.BsonId;
 
 import com.bank.profile.model.vo.CustomerVO;
 
 public final class MongoCustomerVO extends CustomerVO {
 
-	private ObjectId id;
+	@BsonId
+	private String id;
 
-	public ObjectId getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(ObjectId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
