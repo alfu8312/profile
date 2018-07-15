@@ -2,6 +2,8 @@ package com.bank.profile.producer;
 
 import static org.junit.Assert.assertTrue;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -9,13 +11,17 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 
-import com.bank.profile.producer.Producer;
-
 public class ProducerTest {
 
 	private String topic = "test1";
 	private String filePath = "logs/sample";
 
+	@Test
+	public void test() throws ParseException {
+		String date = "2018-06-30 13:00:00";
+		System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date));
+	}
+	
 	@Test
 	public void excute_sleep() throws Exception {
 		Producer producer = new Producer(topic, filePath);

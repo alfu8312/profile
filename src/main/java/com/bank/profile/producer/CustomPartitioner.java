@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
 
+import com.bank.profile.util.KeyUtils;
 import com.bank.profile.util.LogTypes;
 
 public class CustomPartitioner implements Partitioner {
@@ -16,9 +17,9 @@ public class CustomPartitioner implements Partitioner {
 	}
 
 	public int partition(String topic, Object key, byte[] keyBytes, Object value, byte[] valueBytes, Cluster cluster) {
-		String[] keys = ((String) key).split(" ");
+		String partitionKey = KeyUtils.getPartitionKey((String) key);
 		// LogTypes.CUSTOMER round robin
-		if (LogTypes.CUSTOMER.equals(keys[0])) {
+		if (LogTypes.CUSTOMER.equals(partitionKey)) {
 			int partition = counter.getAndIncrement();
 			if (partition == Integer.MAX_VALUE) {
 				counter.set(0);
@@ -26,7 +27,7 @@ public class CustomPartitioner implements Partitioner {
 			}
 			return partition % cluster.partitionCountForTopic(topic);
 		} else {
-			return keys[1].hashCode() % cluster.partitionCountForTopic(topic);
+			return partitionKey.hashCode() % cluster.partitionCountForTopic(topic);
 		}
 	}
 
