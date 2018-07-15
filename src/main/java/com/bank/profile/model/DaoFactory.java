@@ -10,6 +10,7 @@ import com.bank.profile.model.dao.CustomerDao;
 import com.bank.profile.util.PropUtils;
 import com.bank.profile.util.PropUtils.PropType;
 
+@SuppressWarnings("rawtypes")
 public abstract class DaoFactory {
 
 	private static Map<String, Properties> propMap = new HashMap<>();

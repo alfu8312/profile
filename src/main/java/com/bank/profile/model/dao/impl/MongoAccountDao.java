@@ -1,10 +1,14 @@
 package com.bank.profile.model.dao.impl;
 
+import org.bson.Document;
+
 import com.bank.profile.model.DaoFactory;
 import com.bank.profile.model.MongoDaoFactory;
 import com.bank.profile.model.dao.AccountDao;
 import com.bank.profile.model.vo.mongo.MongoAccountVO;
+import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.UpdateOptions;
 
 public class MongoAccountDao implements AccountDao<MongoAccountVO> {
 
@@ -21,8 +25,26 @@ public class MongoAccountDao implements AccountDao<MongoAccountVO> {
 
 	@Override
 	public void saveAccount(MongoAccountVO account) {
-		// TODO Auto-generated method stub
+		System.out.println("account dao : " + Thread.currentThread().getName());
 
+		BasicDBObject updateDoc = new BasicDBObject("$max",
+				new BasicDBObject().append("accountNumber", account.getId()).append("balance", account.getBalance())
+						.append("maxDeposit", account.getMaxDeposit()).append("maxWithdraw", account.getMaxWithdraw())
+						.append("maxTransfer", account.getMaxTransfer()));
+
+		BasicDBObject setDoc = new BasicDBObject();
+		if (account.getCustomerNumber() != null) {
+			setDoc.append("customerNumber", account.getCustomerNumber());
+		}
+		if (account.getCreateDt() != null) {
+			setDoc.append("createDt", account.getCreateDt());
+		}
+
+		if (!setDoc.isEmpty()) {
+			updateDoc.append("$set", setDoc);
+		}
+
+		getCollection().updateOne(new Document("_id", account.getId()), updateDoc, new UpdateOptions().upsert(true));
 	}
 
 	@Override
@@ -31,10 +53,5 @@ public class MongoAccountDao implements AccountDao<MongoAccountVO> {
 		return null;
 	}
 
-	@Override
-	public void updateSummary(MongoAccountVO account) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

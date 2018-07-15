@@ -29,7 +29,7 @@ public class Producer {
 		Stream<String> lines = null;
 		try {
 			int i = 0;
-			while (i++ < 2) {
+			while (i++ < 1) {
 				System.out.println("send logs!!! ## : " + i);
 				lines = Files.lines(Paths.get(getClass().getClassLoader().getResource(filePath).toURI()));
 				lines.forEach((line) -> {

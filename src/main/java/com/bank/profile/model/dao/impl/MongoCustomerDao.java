@@ -1,6 +1,5 @@
 package com.bank.profile.model.dao.impl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.bank.profile.model.DaoFactory;

@@ -13,6 +13,7 @@ import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
+@SuppressWarnings("rawtypes")
 public class MongoDaoFactory extends DaoFactory {
 
 	private Properties props;
