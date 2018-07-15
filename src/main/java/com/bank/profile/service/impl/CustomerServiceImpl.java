@@ -33,7 +33,6 @@ public class CustomerServiceImpl implements CustomerService<MongoCustomerVO> {
 	public void saveCustomerBatch(List<ConsumerRecord<String, String>> customerRecords) throws Exception {
 		List<MongoCustomerVO> customerList = new ArrayList<>();
 		// a,1,홍길동,2018-06-30 13:00:00
-		System.out.println("customer size : " + customerRecords.size());
 		for (ConsumerRecord<String, String> record : customerRecords) {
 			MongoCustomerVO vo = new MongoCustomerVO();
 			String[] data = record.value().split(",");

@@ -10,7 +10,6 @@ import com.bank.profile.model.MongoDaoFactory;
 import com.bank.profile.model.dao.AccountDao;
 import com.bank.profile.model.vo.mongo.MongoAccountVO;
 import com.mongodb.BasicDBObject;
-import com.mongodb.Block;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
@@ -73,8 +72,7 @@ public class MongoAccountDao implements AccountDao<MongoAccountVO> {
 
 	@Override
 	public MongoAccountVO findByAccountId(String accountNumber) {
-		// TODO Auto-generated method stub
-		return null;
+		return getCollection().find(new BasicDBObject("accountNumber", accountNumber)).first();
 	}
 
 }

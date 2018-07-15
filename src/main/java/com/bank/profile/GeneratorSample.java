@@ -7,7 +7,7 @@ import java.util.Map;
 public class GeneratorSample {
 
 	public static String generateFile() {
-		return "logs/sample";
+		return "logs/sample2";
 	}
 
 	public static void main(String[] args) throws Exception {

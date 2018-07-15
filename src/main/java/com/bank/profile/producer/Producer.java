@@ -35,14 +35,8 @@ public class Producer {
 				lines.forEach((line) -> {
 					queue.offer(line);
 				});
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {

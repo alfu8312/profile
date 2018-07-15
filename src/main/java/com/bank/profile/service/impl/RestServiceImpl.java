@@ -9,6 +9,7 @@ import com.bank.profile.model.dao.impl.MongoAccountDao;
 import com.bank.profile.model.dao.impl.MongoAmountDao;
 import com.bank.profile.model.dao.impl.MongoCustomerDao;
 import com.bank.profile.model.dao.impl.MongoNativeDao;
+import com.bank.profile.model.vo.AccountProfileVO;
 import com.bank.profile.model.vo.CustomerProfileVO;
 import com.bank.profile.model.vo.mongo.MongoAccountVO;
 import com.bank.profile.model.vo.mongo.MongoCustomerVO;
@@ -81,6 +82,26 @@ public class RestServiceImpl {
 
 		return gson.toJson(customerProfileVO);
 
+	}
+
+	public String selectAccountProfile(String customerNumber, String accountNumber) {
+		AccountProfileVO accountProfileVO = new AccountProfileVO();
+		try {
+			MongoAccountVO account = accountDao.findByAccountId(accountNumber);
+
+			accountProfileVO.setAccountNumber(account.getAccountNumber());
+			accountProfileVO.setCustomerNumber(account.getCustomerNumber());
+			accountProfileVO.setBalance(account.getBalance());
+			accountProfileVO.setCreateDt(account.getCreateDt());
+
+			accountProfileVO.setDeposits(amountDao.findByAccountId(MongoAmountDao.COLLECTION_DEPOSIT, accountNumber));
+			accountProfileVO.setTransfers(amountDao.findByAccountId(MongoAmountDao.COLLECTION_TRANSFER, accountNumber));
+			accountProfileVO
+					.setWithdrawals(amountDao.findByAccountId(MongoAmountDao.COLLECTION_WITHDRAWAL, accountNumber));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gson.toJson(accountProfileVO);
 	}
 
 	private int getMax(int oldNum, int newNum) {

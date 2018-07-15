@@ -49,7 +49,7 @@ class ProducerThread implements Runnable {
 							exception.printStackTrace();
 							queue.offer(logData); // 유실 방지
 						}
-						// System.out.println("key : " + record.key() + ", data: " + record.value());
+						 System.out.println("key : " + record.key() + ", data: " + record.value());
 					});
 				} else {
 					checkMinIdleTime();
