@@ -27,8 +27,6 @@ public class MongoAmountDao implements AmountDao<MongoAmountVO> {
 	@Override
 	public void saveAmountsBatch(String collectionName, List<MongoAmountVO> amounts) {
 		if (!amounts.isEmpty()) {
-			System.out.println(
-					"saveAmounts : " + amounts.size() + Thread.currentThread().getName() + " : " + collectionName);
 			getCollection(collectionName).insertMany(amounts);
 		}
 	}

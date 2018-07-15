@@ -1,5 +1,8 @@
 package com.bank.profile.model.dao.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bson.Document;
 
 import com.bank.profile.model.DaoFactory;
@@ -7,7 +10,10 @@ import com.bank.profile.model.MongoDaoFactory;
 import com.bank.profile.model.dao.AccountDao;
 import com.bank.profile.model.vo.mongo.MongoAccountVO;
 import com.mongodb.BasicDBObject;
+import com.mongodb.Block;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 
 public class MongoAccountDao implements AccountDao<MongoAccountVO> {
@@ -25,8 +31,6 @@ public class MongoAccountDao implements AccountDao<MongoAccountVO> {
 
 	@Override
 	public void saveAccount(MongoAccountVO account) {
-		System.out.println("account dao : " + Thread.currentThread().getName());
-
 		BasicDBObject updateDoc = new BasicDBObject("$max",
 				new BasicDBObject().append("accountNumber", account.getId()).append("balance", account.getBalance())
 						.append("maxDeposit", account.getMaxDeposit()).append("maxWithdraw", account.getMaxWithdraw())
@@ -48,10 +52,29 @@ public class MongoAccountDao implements AccountDao<MongoAccountVO> {
 	}
 
 	@Override
-	public MongoAccountVO findByAccountId(int accountNumber) {
+	public List<MongoAccountVO> findByCustomerId(String customerNumber) {
+		// TODO Auto-generated method stub
+		FindIterable<MongoAccountVO> result = getCollection().find(new BasicDBObject("customerNumber", customerNumber));
+		List<MongoAccountVO> returnList = new ArrayList<>();
+		MongoCursor<MongoAccountVO> it = null;
+		try {
+			it = result.iterator();
+			while (it.hasNext()) {
+				returnList.add(it.next());
+			}
+		} finally {
+			if (it != null) {
+				it.close();
+			}
+		}
+
+		return returnList;
+	}
+
+	@Override
+	public MongoAccountVO findByAccountId(String accountNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 }

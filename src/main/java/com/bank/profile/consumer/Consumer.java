@@ -57,11 +57,12 @@ public class Consumer {
 		boolean[] hasException = { false };
 		ConsumerRecords<String, String> records = consumer.poll(200);
 		if (!records.isEmpty()) {
-			System.out.println("get records!!!! : " + records.count());
+			// System.out.println("get records!!!! : " + records.count());
 			ForkJoinPool myPool = new ForkJoinPool(2);
 			myPool.submit(() -> {
 				records.partitions().parallelStream().forEach(partition -> {
-					System.out.println(Thread.currentThread().getName() + " : " + partition.partition());
+					// System.out.println(Thread.currentThread().getName() + " : " +
+					// partition.partition());
 
 					Map<String, List<ConsumerRecord<String, String>>> mapped = getMappedRecords(
 							records.records(partition));
@@ -90,9 +91,9 @@ public class Consumer {
 					}
 
 					if (!hasException[0]) {
-						System.out.println("commit before");
+						// System.out.println("commit before");
 						consumer.commitSync();
-						System.out.println("commit after");
+						// System.out.println("commit after");
 					}
 				});
 			});

@@ -4,12 +4,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.bank.profile.model.DaoFactory;
 import com.bank.profile.model.DataSourceTypes;
+import com.bank.profile.model.dao.impl.MongoAccountDao;
 import com.bank.profile.model.dao.impl.MongoCustomerDao;
 import com.bank.profile.model.dao.impl.MongoNativeDao;
 import com.bank.profile.model.vo.mongo.MongoAccountVO;
@@ -18,6 +20,7 @@ import com.mongodb.BasicDBObject;
 
 public class DaoTest {
 	private CustomerDao customerDao;
+	private MongoAccountDao accountDao;
 	private MongoNativeDao nativeDao;
 
 	@Before
@@ -25,6 +28,14 @@ public class DaoTest {
 		DaoFactory daoFactory = DaoFactory.getDaoFactory(DataSourceTypes.MONGODB);
 		customerDao = new MongoCustomerDao(daoFactory);
 		nativeDao = new MongoNativeDao(daoFactory);
+		accountDao = new MongoAccountDao(daoFactory);
+	}
+
+	@Test
+	public void find_account_List() {
+		String customerNumber = "1";
+		List<MongoAccountVO> list = accountDao.findByCustomerId(customerNumber);
+		System.out.println(list);
 	}
 
 	@Test
