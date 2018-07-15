@@ -77,24 +77,24 @@ public class AccountServiceImpl implements AccountService<MongoAccountVO> {
 			accountVO.setAccountNumber(data[2]);
 			accountVO.setCreateDt(new SimpleDateFormat(DATE_FORMAT).parse(data[3]));
 		} else if (LogTypes.DEPOSIT.equals(data[0])) {
-			Integer deposit = Integer.parseInt(data[3]);
+			int deposit = Integer.parseInt(data[3]);
 			accountVO.setBalance(accountVO.getBalance() + deposit);
 			accountVO.setMaxDeposit(getMax(accountVO.getMaxDeposit(), deposit));
 			deposits.add(new MongoAmountVO(data[2], deposit, new SimpleDateFormat(DATE_FORMAT).parse(data[4])));
 		} else if (LogTypes.WITHDRAWAL.equals(data[0])) {
-			Integer withdraw = Integer.parseInt(data[3]);
+			int withdraw = Integer.parseInt(data[3]);
 			accountVO.setBalance(accountVO.getBalance() - withdraw);
 			accountVO.setMaxWithdraw(getMax(accountVO.getMaxWithdraw(), withdraw));
 			withdrawals.add(new MongoAmountVO(data[2], withdraw, new SimpleDateFormat(DATE_FORMAT).parse(data[4])));
 		} else if (LogTypes.TRANSFER.equals(data[0])) {
-			Integer transfer = Integer.parseInt(data[6]);
+			int transfer = Integer.parseInt(data[6]);
 			accountVO.setBalance(accountVO.getBalance() - transfer);
 			accountVO.setMaxTransfer(getMax(accountVO.getMaxTransfer(), transfer));
 			transfers.add(new MongoAmountVO(data[2], transfer, new SimpleDateFormat(DATE_FORMAT).parse(data[7])));
 		}
 	}
 
-	private int getMax(Integer oldNum, Integer newNum) {
+	private int getMax(int oldNum, int newNum) {
 		return oldNum < newNum ? newNum : oldNum;
 	}
 

@@ -9,6 +9,10 @@ import com.bank.profile.model.vo.AmountVO;
 
 public class MongoAmountVO extends AmountVO {
 
+//	public MongoAmountVO() {
+//
+//	}
+
 	public MongoAmountVO(String accountNumber, Integer amount, Date createDt) {
 		super(accountNumber, amount, createDt);
 	}
