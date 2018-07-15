@@ -16,7 +16,6 @@ import com.bank.profile.model.vo.mongo.MongoCustomerVO;
 public class CustomerDaoTest {
 	private CustomerDao customerDao;
 
-	
 	@Before
 	public void init() throws IOException {
 		DaoFactory daoFactory = DaoFactory.getDaoFactory(DataSourceTypes.MONGODB);
@@ -34,7 +33,7 @@ public class CustomerDaoTest {
 		MongoCustomerVO selectedCustomerVO = (MongoCustomerVO) customerDao.findByCustomerId(customerNumber);
 		assertTrue(selectedCustomerVO.getId().equals(customerVO.getId()));
 	}
-	
+
 	@Test
 	public void delete_all_customer() {
 		int customerNumber = 1;

@@ -8,11 +8,11 @@ public class ConsumerMain {
 
 		String topic = "test2";
 
-		if (args != null) {
+		if (args != null && args.length > 0) {
 			topic = args[0];
 		}
 		try {
-			Consumer consumer = new Consumer(topic);
+			Consumer consumer = new Consumer(topic, null);
 			consumer.excute();
 		} catch (IOException e) {
 			e.printStackTrace();
